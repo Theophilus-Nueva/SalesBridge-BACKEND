@@ -28,7 +28,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
             detail="No active bookings found."
         )
 
-    access_token = create_access_token(data={"sub": booking.booking_id})
+    access_token = create_access_token(data={"sub": f"{booking.booking_id}"})
     
     return {
         "access_token": access_token, 
