@@ -1,10 +1,9 @@
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Date, Text
-from sqlalchemy.orm import relationship
 from database import Base
 from datetime import datetime
 
 class Customer(Base):
-    __tablename__ = "Customer"
+    __tablename__ = "customer"
     customer_id = Column(Integer, primary_key=True, index=True)
     customer_name = Column(String(100))
     phone = Column(String(20))
@@ -12,7 +11,7 @@ class Customer(Base):
     password = Column(String(100))
 
 class Room(Base):
-    __tablename__ = "Room"
+    __tablename__ = "room"
     room_id = Column(Integer, primary_key=True, index=True)
     room_number = Column(String(10))
     room_type = Column(String(50))
@@ -21,21 +20,21 @@ class Room(Base):
     guests = Column(Integer)
 
 class Schedule(Base):
-    __tablename__ = "Schedule"
+    __tablename__ = "schedule"
     schedule_id = Column(Integer, primary_key=True, index=True)
-    room_id = Column(Integer, ForeignKey("Room.room_id"))
+    room_id = Column(Integer, ForeignKey("room.room_id"))
     check_in = Column(Date)
     check_out = Column(Date)
 
 class Booking(Base):
-    __tablename__ = "Booking"
+    __tablename__ = "booking"
     booking_id = Column(Integer, primary_key=True, index=True)
-    customer_id = Column(Integer, ForeignKey("Customer.customer_id"))
-    schedule_id = Column(Integer, ForeignKey("Schedule.schedule_id"))
+    customer_id = Column(Integer, ForeignKey("customer.customer_id"))
+    schedule_id = Column(Integer, ForeignKey("schedule.schedule_id"))
     booking_date = Column(DateTime, default=datetime.utcnow)
 
 class Product(Base):
-    __tablename__ = "Product"
+    __tablename__ = "product"
     product_id = Column(Integer, primary_key=True, index=True)
     product_name = Column(String(100))
     stock = Column(Integer)
@@ -44,19 +43,19 @@ class Product(Base):
     product_image = Column(String(255))
 
 class TransactionHeader(Base):
-    __tablename__ = "TransactionHeader"
+    __tablename__ = "transactionheader"
     transaction_id = Column(Integer, primary_key=True, index=True)
-    booking_id = Column(Integer, ForeignKey("Booking.booking_id"))
+    booking_id = Column(Integer, ForeignKey("booking.booking_id"))
     subtotal = Column(Float)
     vat = Column(Float)
     total = Column(Float)
     transaction_date = Column(DateTime, default=datetime.utcnow)
 
 class TransactionDetails(Base):
-    __tablename__ = "TransactionDetails"
+    __tablename__ = "transactiondetails"
     detail_id = Column(Integer, primary_key=True, index=True)
-    transaction_id = Column(Integer, ForeignKey("TransactionHeader.transaction_id"))
-    product_id = Column(Integer, ForeignKey("Product.product_id"))
+    transaction_id = Column(Integer, ForeignKey("transactionheader.transaction_id"))
+    product_id = Column(Integer, ForeignKey("product.product_id"))
     quantity = Column(Integer)
     unit_price = Column(Float)
     amount = Column(Float)
