@@ -9,6 +9,7 @@ class Customer(Base):
     customer_name = Column(String(100))
     phone = Column(String(20))
     email = Column(String(100))
+    password = Column(String(100))
 
 class Room(Base):
     __tablename__ = "Room"
