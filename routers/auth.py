@@ -1,14 +1,19 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request 
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from database import get_db
-from security import create_access_token
+from security import create_access_token, limiter 
 from models import Customer, Booking
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 @router.post("/login")
-def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+@limiter.limit("3/minute") 
+def login(
+    request: Request, 
+    form_data: OAuth2PasswordRequestForm = Depends(), 
+    db: Session = Depends(get_db)
+):
     customer = db.query(Customer).filter(Customer.email == form_data.username).first()
     
     if not customer or customer.password != form_data.password:
